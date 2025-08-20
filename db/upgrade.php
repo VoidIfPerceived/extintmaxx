@@ -98,5 +98,41 @@ function xmldb_extintmaxx_upgrade($oldversion): bool {
         upgrade_mod_savepoint(true, 2025040400, 'extintmaxx');
     }
 
+    if ($oldversion < 2025072302) {
+
+        // Define field url to be added to extintmaxx_admin.
+        $table = new xmldb_table('extintmaxx_admin');
+        $field = new xmldb_field('url', XMLDB_TYPE_CHAR, '256', null, null, null, null, 'timemodified');
+
+        // Conditionally launch add field url.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+    }
+
+    if ($oldversion < 2025081200) {
+
+        // Define field url to be added to extintmaxx_admin.
+        $table = new xmldb_table('extintmaxx_admin');
+        $field = new xmldb_field('name', XMLDB_TYPE_CHAR, '256', null, null, null, null, 'url');
+
+        // Conditionally launch add field url.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+    }
+
+    if ($oldversion < 2025081800 ) {
+
+        // Define field url to be added to extintmaxx_admin.
+        $table = new xmldb_table('extintmaxx_provider');
+        $field = new xmldb_field('profile_id', XMLDB_TYPE_CHAR, '256', null, null, null, null, 'providercoursedesc');
+
+        // Conditionally launch add field url.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+    }
+
     return true;
 };

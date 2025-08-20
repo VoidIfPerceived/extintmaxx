@@ -41,15 +41,15 @@ class acci {
 
     }
 
-        function status_message($status, $message) {
-            "Status: $status<br>Message: $message<br>";
-        }
+    function status_message($status, $message) {
+        "Status: $status<br>Message: $message<br>";
+    }
     /** Gets all courses available to an admin
      *  @param string $username **REQUIRED** admin username
      *  @param string $password **REQUIRED** admin password
      *  @return object $responsedata API Response in object format
      */
-    function admin_login($username, $password) {
+    function admin_login($username, $password, $url = null) {
         $curl = new curl();
         $adminendpoint = "/api/adminLogin/";
 
@@ -67,7 +67,11 @@ class acci {
             'accept: application/json',
         );
 
-        $url = "{$this->accicoreurl}{$adminendpoint}";
+        if ($url == null) {
+            $url = $this->accicoreurl;
+        }
+
+        $url = "{$url}{$adminendpoint}";
 
         $curl->setHeader($header);
 
@@ -85,6 +89,7 @@ class acci {
          *          - @return string remember token (remember_token)
          *          - @return int superadmin id (superadmin_id)
          */
+
         $response = $curl->post($url, $data, $options);
 
         if ($response == false) {
@@ -106,7 +111,7 @@ class acci {
      *  @param string $token **REQUIRED** admintoken
      *  @return object $responsedata API Response in object format
      */
-    function get_referral_types_by_admin($token) {
+    function get_referral_types_by_admin($token, $url = null) {
         $curl = new curl();
         $referraltypesendpoint = "/api/getReferralTypesByAdmin";
 
@@ -117,13 +122,14 @@ class acci {
 
         $header = array(
             'accept: application/json',
+            'Authorization: Bearer '.$token
         );
 
-        $data = array(
-            "token" => $token
-        );
+        if ($url == null) {
+            $url = $this->accicoreurl;
+        }
 
-        $url = "{$this->accicoreurl}{$referraltypesendpoint}";
+        $url = "{$url}{$referraltypesendpoint}";
 
         $curl->setHeader($header);
 
@@ -145,7 +151,7 @@ class acci {
          *          - @return string referral type description (description)
          *          - @return string referral type icon (icon)
          */
-        $response = $curl->post($url, $data, $options);
+        $response = $curl->get($url, $data = null, $options);
 
         if ($response == false) {
             echo "Admin Login Curl Error: ";
@@ -176,7 +182,7 @@ class acci {
      *          - @return string course guid (guid)
      *          - @return array course info array (course)
      */
-    function get_all_courses($token, $referraltypeid) {
+    function get_all_courses($token, $referraltypeid, $url = null) {
         $curl = new curl();
         $getallcoursesendpoint = "/api/getAllCourses";
 
@@ -186,15 +192,19 @@ class acci {
         );
 
         $header = array(
-            'accept: application/json'
+            'accept: application/json',
+            'Authorization: Bearer '.$token
         );
 
         $data = array(
-            "token" => $token,
             "id" => $referraltypeid
         );
 
-        $url = "{$this->accicoreurl}{$getallcoursesendpoint}";
+        if ($url == null) {
+            $url = $this->accicoreurl;
+        }
+
+        $url = "{$url}{$getallcoursesendpoint}";
 
         $curl->setHeader($header);
 
@@ -241,7 +251,7 @@ class acci {
      *          - @return string referral type description (description)
      *          - @return string referral type icon (icon)
      */
-    function get_students_by_admin($admintoken) {
+    function get_students_by_admin($admintoken, $url = null) {
         $curl = new curl();
         $getstudentsbyadminendpoint = "/api/getStudentsByAdmin";
 
@@ -251,14 +261,19 @@ class acci {
         );
 
         $header = array(
-            'accept: application/json'
+            'accept: application/json',
+            'Authorization: Bearer '.$admintoken
         );
 
         $data = array(
-            "token" => $admintoken
+
         );
 
-        $url = "{$this->accicoreurl}{$getstudentsbyadminendpoint}";
+        if ($url == null) {
+            $url = $this->accicoreurl;
+        }
+
+        $url = "{$url}{$getstudentsbyadminendpoint}";
 
         $curl->setHeader($header);
 
@@ -286,7 +301,7 @@ class acci {
      *  @param string $providerstudentid **REQUIRED** provider student id
      *  @return object $responsedata API Response in object format
     */
-    function get_enrollment_list_by_student_id($admintoken, $providerstudentid) {
+    function get_enrollment_list_by_student_id($admintoken, $providerstudentid, $url = null) {
         $curl = new curl();
         $getenrollmentlistbystudentid = "/api/getEnrollmentListByStudentId";
 
@@ -296,15 +311,19 @@ class acci {
         );
 
         $header = array(
-            'accept: application/json'
+            'accept: application/json',
+            'Authorization: Bearer '.$admintoken
         );
 
         $data = array(
-            "token" => $admintoken,
             "student_id" => $providerstudentid
         );
 
-        $url = "{$this->accicoreurl}{$getenrollmentlistbystudentid}";
+        if ($url == null) {
+            $url = $this->accicoreurl;
+        }
+
+        $url = "{$url}{$getenrollmentlistbystudentid}";
 
         $curl->setHeader($header);
 
@@ -327,7 +346,7 @@ class acci {
     }
 
     /** Gets a list of US states which a new admin can be created under */
-    function get_state($admintoken) {
+    function get_state($admintoken, $url = null) {
         $curl = new curl();
         $getstateendpoint = "/api/getState";
 
@@ -337,14 +356,19 @@ class acci {
         );
 
         $header = array(
-            'accept: application/json'
+            'accept: application/json',
+            'Authorization: Bearer '.$admintoken
         );
 
         $data = array(
-            "token" => $admintoken
+
         );
 
-        $url = "{$this->accicoreurl}{$getstateendpoint}";
+        if ($url == null) {
+            $url = $this->accicoreurl;
+        }
+
+        $url = "{$url}{$getstateendpoint}";
 
         $curl->setHeader($header);
 
@@ -367,7 +391,7 @@ class acci {
     }
 
     /** Gets all agencies within a given state within an admin registry*/
-    function get_agency_by_state_id($admintoken, $statecode) {
+    function get_agency_by_state_id($admintoken, $statecode, $url = null) {
         $curl = new curl();
         $getagencybystateidendpoint = "/api/getAgencyByStateId";
 
@@ -377,15 +401,19 @@ class acci {
         );
 
         $header = array(
-            'accept: application/json'
+            'accept: application/json',
+            'Authorization: Bearer '.$admintoken
         );
 
         $data = array(
-            "token" => $admintoken,
             "state_code" => $statecode
         );
 
-        $url = "{$this->accicoreurl}{$getagencybystateidendpoint}";
+        if ($url == null) {
+            $url = $this->accicoreurl;
+        
+        }
+        $url = "{$url}{$getagencybystateidendpoint}";
 
         $curl->setHeader($header);
 
@@ -424,7 +452,7 @@ class acci {
      * @param string $notes *Optional* notes
      * @return object $responsedata API Response in object format
     */
-    function add_admin($admintoken, $statecode, $agencyid, $title, $firstname, $lastname, $email, $password, $confirmpassword, $phone = null, $address = null, $city = null, $zip = null, $notes = null) {
+    function add_admin($admintoken, $statecode, $agencyid, $title, $firstname, $lastname, $email, $password, $confirmpassword, $phone = null, $address = null, $city = null, $zip = null, $notes = null, $url = null) {
         $curl = new curl();
         $addadminendpoint = "/api/addAdmin";
 
@@ -442,10 +470,10 @@ class acci {
 
         $header = array(
             'accept: application/json',
+            'Authorization: Bearer '.$admintoken,
         );
 
         $data = array(
-            'token' => $admintoken,
             'state_code' => $statecode,
             'agency_id' => $agencyid,
             'title' => $title,
@@ -461,7 +489,11 @@ class acci {
             'notes' => $notes
         );
 
-        $url = "{$this->accicoreurl}{$addadminendpoint}";
+        if ($url == null) {
+            $url = $this->accicoreurl;
+        }
+
+        $url = "{$url}{$addadminendpoint}";
 
         $curl->setHeader($header);
 
@@ -500,7 +532,7 @@ class acci {
      * @param string $coachphone *Optional* Coach phone
      * @return object $responsedata API Response in object format
      */
-    function new_student_enrollment($admintoken, $firstname, $lastname, $email, $password, $passwordconfirmation, $adminid, $agencyid, $referraltypeid, $courseid, $phone = null, $casenumber = null, $coachname = null, $coachemail = null, $coachphone = null) {
+    function new_student_enrollment($admintoken, $firstname, $lastname, $email, $password, $passwordconfirmation, $adminid, $agencyid, $referraltypeid, $courseid, $phone = null, $casenumber = null, $coachname = null, $coachemail = null, $coachphone = null, $url = null) {
         $curl = new curl();
         $newstudentenrollmentendpoint = "/api/newStudentEnrollment";
 
@@ -518,10 +550,10 @@ class acci {
 
         $header = array(
             'accept: application/json',
+            'Authorization: Bearer '.$admintoken
         );
 
         $data = array(
-            'token' => $admintoken,
             'firstname' => $firstname,
             'lastname' => $lastname,
             'email' => $email,
@@ -538,7 +570,11 @@ class acci {
             'coachphone' => $coachphone 
         );
 
-        $url = "{$this->accicoreurl}{$newstudentenrollmentendpoint}";
+        if ($url == null) {
+            $url = $this->accicoreurl;
+        }
+
+        $url = "{$url}{$newstudentenrollmentendpoint}";
 
         $curl->setHeader($header);
 
@@ -584,7 +620,7 @@ class acci {
      *          - @return array admin info array (adminusr)
      *          - @return array superadmin info array (superadmin)
      */
-    function student_self_enrolled($remembertoken, $firstname, $lastname, $studentemail, $courseguid, $casenumber, $coachname = null, $coachemail = null, $coachphone = null) {
+    function student_self_enrolled($remembertoken, $firstname, $lastname, $studentemail, $courseguid, $casenumber, $coachname = null, $coachemail = null, $coachphone = null, $url = null) {
         $curl = new curl();
         $studentselfenrolledendpoint = "/api/studentSelfEnrolled";
 
@@ -600,10 +636,10 @@ class acci {
 
         $header = array(
             'accept: application/json',
+            'Authorization: Bearer '.$remembertoken
         );
 
         $data = array(
-            'token' => $remembertoken,
             'course_guid' => $courseguid,
             'firstname' => $firstname,
             'lastname' => $lastname,
@@ -614,7 +650,11 @@ class acci {
             'coachphone' => $coachphone 
         );
 
-        $url = "{$this->accicoreurl}{$studentselfenrolledendpoint}";
+        if ($url == null) {
+            $url = $this->accicoreurl;
+        }
+
+        $url = "{$url}{$studentselfenrolledendpoint}";
 
         $curl->setHeader($header);
 
@@ -643,7 +683,7 @@ class acci {
      *  @param int $providercourseid **REQUIRED** provider course id
      *  @return object $responsedata API Response in object format
     */
-    function check_student_status($admintoken, $providerstudentid, $providercourseid) {
+    function check_student_status($admintoken, $providerstudentid, $providercourseid, $url = null) {
         $curl = new curl();
         $checkstudentstatusendpoint = "/api/check-student-status";
 
@@ -653,16 +693,20 @@ class acci {
         );
 
         $header = array(
-            'accept: application/json'
+            'accept: application/json',
+            'Authorization: Bearer '.$admintoken
         );
 
         $data = array(
-            "token" => $admintoken,
             "student_id" => $providerstudentid,
             "course_id" => $providercourseid
         );
 
-        $url = "{$this->accicoreurl}{$checkstudentstatusendpoint}";
+        if ($url == null) {
+            $url = $this->accicoreurl;
+        }
+
+        $url = "{$url}{$checkstudentstatusendpoint}";
 
         $curl->setHeader($header);
 
@@ -690,7 +734,7 @@ class acci {
      *  @param string $studentpassword **REQUIRED** student password
      *  @return object $responsedata API Response in object format
      */
-    function student_auth($studentemail, $studentpassword, $token) {
+    function student_auth($studentemail, $studentpassword, $token, $url = null) {
         $curl = new curl();
         $studentauthendpoint = "/api/studentLogin/";
 
@@ -701,15 +745,19 @@ class acci {
 
         $header = array(
             'accept: application/json',
+            'Authorization: Bearer '.$token
         );
 
         $data = array(
-            'token' => $token,
             'email' => $studentemail,
             'password' => $studentpassword
         );
 
-        $url = "{$this->accicoreurl}{$studentauthendpoint}";
+        if ($url == null) {
+            $url = $this->accicoreurl;
+        }
+
+        $url = "{$url}{$studentauthendpoint}";
 
         $curl->setHeader($header);
 
@@ -747,7 +795,7 @@ class acci {
      * Admin Login
      *  
      */
-    function student_logout($userid, $consumerkey) {
+    function student_logout($userid, $consumerkey, $url = null) {
         $curl = new curl();
         $studentlogoutendpoint = "/api/moodle_logout/";
 
@@ -758,6 +806,7 @@ class acci {
 
         $header = array(
             'accept: application/json',
+            'Authorization: Bearer '.$consumerkey
         );
 
         $data = array(
@@ -765,7 +814,11 @@ class acci {
             "consumer_key" => $consumerkey,
         );
 
-        $url = "https://www.lifeskillslink.com{$studentlogoutendpoint}";
+        if ($url == null) {
+            $url = "https://www.lifeskillslink.com";
+        }
+
+        $url = "{$url}{$studentlogoutendpoint}";
 
         $curl->setHeader($header);
 

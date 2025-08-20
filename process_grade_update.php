@@ -20,5 +20,5 @@ $returnurl = new moodle_url('/course/view.php', array('id' => $courseid));
 
 extintmaxx_update_grades($module, $userid);
 
-$logout = $acci->student_logout($acciuserid->provideruserid, $acci->admin_login($provider->providerusername, $provider->providerpassword)->data->user->superadmin->consumer_key);
+$logout = $acci->student_logout($acciuserid->provideruserid, $acci->admin_login($provider->providerusername, $provider->providerpassword)->data->user->superadmin->consumer_key, $provider->url);
 redirect($returnurl);

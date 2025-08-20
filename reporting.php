@@ -53,7 +53,7 @@ function get_allowed_students($caplevel, $instances) {
     return $studentsbyinstance;
 }
 
-function parse_table_information($caplevel, $requesteddata = [], $students, $adminrecord) {
+function parse_table_information($caplevel, $requesteddata = [], $students, $adminrecord, $url) {
     $methodchains = new provider_api_method_chains();
     $acci = new acci();
     $tabledata = array();
@@ -68,14 +68,13 @@ function parse_table_information($caplevel, $requesteddata = [], $students, $adm
         array_push($instancesbycourseid, $instances);
     }
     $providercourseids = array();
-    while (count($providercourseids) < count($instancesbycourseid)) {
-        $providercourseid = $instances[count($providercourseids)+1]->providercourseid;
-        array_push($providercourseids, $providercourseid);
+    foreach ($instances as $instance) {
+        array_push($providercourseids, $instance->providercourseid);
     }
     $providercourseids = array_unique($providercourseids);
     $studentsbyprovidercourse = array();
     foreach ($providercourseids as $providercourseid) {
-        $studentdata = $methodchains->get_students_course_data($adminrecord, 'acci', $providercourseid, $provideruserids);
+        $studentdata = $methodchains->get_students_course_data($adminrecord, 'acci', $providercourseid, $provideruserids, $url);
         if ($studentdata) {
             array_push($studentsbyprovidercourse, $studentdata);
         }
@@ -141,7 +140,8 @@ function render_data_table($caplevel, $adminrecord, $columns = [], $data = [], $
         $caplevel,
         $columns, 
         $allowedstudents,
-        $acci->admin_login($adminrecord->providerusername, $adminrecord->providerpassword)
+        $acci->admin_login($adminrecord->providerusername, $adminrecord->providerpassword, $adminrecord->url),
+        $adminrecord->url
     );
     $th = table_row(true, $columns);
     foreach ($th as $header) {

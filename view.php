@@ -46,16 +46,22 @@ function return_to_course_url() {
 function acci_course_url($providerstudent, $providercourse, $providerrecord) {
     $methodchains = new provider_api_method_chains();
     $acci = new acci();
-    $studentcoursedata = $methodchains->get_students_course_data($acci->admin_login($providerrecord->providerusername, $providerrecord->providerpassword), $providerrecord->provider, $providercourse->providercourseid, [$providerstudent->provideruserid]);
+    $adminlogin = $acci->admin_login($providerrecord->providerusername, $providerrecord->providerpassword, $providerrecord->url);
+    $studentcoursedata = $methodchains->get_students_course_data($adminlogin, $providerrecord->provider, $providercourse->providercourseid, [$providerstudent->provideruserid], $providerrecord->url);
     $studentcompletion = $studentcoursedata[0]->coursedata->data->studentcourses->percentage_completed;
+    if ($providerrecord->url == NULL) {
+        $url = 'https://www.lifeskillslink.com';
+    } else {
+        $url = $providerrecord->url;
+    }
     if ($studentcompletion > 0) {
         $studentcourses = $studentcoursedata[0]->coursedata->data->studentcourses;
         $currentframeid = $studentcourses->frame_id;
         $nextframeid = $studentcourses->next_frame_id;
         $previousframeid = $studentcourses->previous_frame_id;
-        $courseforwardurl = "https://www.lifeskillslink.com/studentcourse?id=$providercourse->providercourseid&fid=$currentframeid&next_frame_id=$nextframeid&previous_frame_id=$previousframeid";
+        $courseforwardurl = "$url/studentcourse?id=$providercourse->providercourseid&fid=$currentframeid&next_frame_id=$nextframeid&previous_frame_id=$previousframeid";
     } else {
-        $courseforwardurl = "https://www.lifeskillslink.com/studentcourse?id=$providercourse->providercourseid&student_id=$providerstudent->provideruserid";
+        $courseforwardurl = "$url/studentcourse?id=$providercourse->providercourseid&student_id=$providerstudent->provideruserid";
     }
 
     return $courseforwardurl;
@@ -97,7 +103,7 @@ function generate_iframe($redirecturl, $courseforwardurl) {
             <iframe id=\"viewurl\" 
                 style=\"
                 position:absolute;
-                top:-67px;
+                top:-60px;
                 height:740px;
                 width:100%;
                 left:0;
@@ -116,20 +122,6 @@ function iframe_course_redirect($courseforwardurl) {
                 iframe = iframe.contentWindow.location.href = '$courseforwardurl';
             });
             </script>";
-    // return "<script>
-    //             var iframe = document.getElementById('viewurl');
-    //             var hasRedirected = false;
-                
-    //             if (hasRedirected == false) {
-    //                 iframe.onload = function() {
-    //                     if (hasRedirected == false) {
-    //                         iframe.contentWindow.location.href = '$courseforwardurl';
-    //                     }
-    //                 }
-    //                 hasRedirected = true;
-    //             }
-    //         });
-    //         </script>";
 }
 
 function view_page($redirecturl, $courseforwardurl) {
@@ -158,14 +150,15 @@ if (has_capability('mod/extintmaxx:basicreporting', $context = context_course::i
     $PAGE->set_pagelayout('standard');
     admin_actions($course->id);
 } else {
+    $adminlogin = $acci->admin_login($provider->providerusername, $provider->providerpassword, $provider->url);
     $acciuserid = $DB->get_record(
         'extintmaxx_user',
         array('userid' => $USER->id, 'provider' => $provider->provider, 'instanceid' => $module->id)
     );
-    $providerstudent = $methodchains->student_login($USER->id, $provider->provider, $module, $module->id);
+    $providerstudent = $methodchains->student_login($USER->id, $provider->provider, $module, $module->id, $provider->url);
     $redirecturl = get_redirect_url($providerstudent);
-    $courseforwardurl = acci_course_url($providerstudent, $providercourse, $provider);
-    $logout = $acci->student_logout($acciuserid->provideruserid, $acci->admin_login($provider->providerusername, $provider->providerpassword)->data->user->superadmin->consumer_key);
+    $courseforwardurl = acci_course_url($providerstudent, $module, $provider);
+    $logout = $acci->student_logout($acciuserid->provideruserid, $adminlogin->data->user->superadmin->consumer_key, $provider->url);
     $PAGE->set_context(context_system::instance());
     $PAGE->set_pagelayout('incourse');
     echo exit_activity_button($cm->course, $module->id);

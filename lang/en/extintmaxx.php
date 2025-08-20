@@ -38,10 +38,14 @@ defined('MOODLE_INTERNAL') || die();
 /** Admin Forms */
     $string['apikey'] = 'API Key';
     $string['apikey_help'] = 'Enter the API Token for the External Provider you would like to integrate with.';
+    $string['name'] = 'Profile Name';
+    $string['name_help'] = 'Enter the name that this set of credentials will be referred to as.';
     $string['providersselection'] = 'Providers';
     $string['providersselection_help'] = 'Select the Provider you would like to integrate with.';
     $string['providercourse'] = 'Provider Course';
     $string['providercourse_help'] = 'Select the Provider Course you would like to use for this instance.';
+    $string['environmenturl'] = 'Environment URL (Optional)';
+    $string['environmenturl_help'] = 'Enter the URL of the environment you would like to use. (Optional, leave blank for production)';
     $string['grading'] = 'Grading';
     $string['grade'] = 'Maximum Activity Grade';
     $string['grade_help'] = 'Enter the maximum grade for this instance.';

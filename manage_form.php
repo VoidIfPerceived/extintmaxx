@@ -24,8 +24,15 @@ class mod_extintmaxx_manage_form extends moodleform {
             'acci' => get_string('acci', 'extintmaxx'),
             // 'nali' => get_string('nali', 'extintmaxx')
         );
+
+        $profilelist = $DB->get_records('extintmaxx_admin', null, 'name ASC', 'id, name');
+
         $mform->addElement('select', 'provider', get_string('providersselection', 'extintmaxx'), $provideroptions);
         $mform->addHelpButton('provider', 'providersselection', 'extintmaxx');
+
+        $mform->addElement('text', 'name', get_string('name', 'extintmaxx'));
+        $mform->setType('name', PARAM_TEXT);
+        $mform->addHelpButton('name', 'name', 'extintmaxx');
 
         $mform->addElement('text', 'providerusername', get_string('providerusername', 'extintmaxx'));
         $mform->setType('providerusername', PARAM_TEXT);
@@ -34,6 +41,10 @@ class mod_extintmaxx_manage_form extends moodleform {
         $mform->addElement('text', 'providerpassword', get_string('providerpassword', 'extintmaxx'));
         $mform->setType('providerpassword', PARAM_TEXT);
         $mform->addHelpButton('providerpassword', 'providerpassword', 'extintmaxx');
+
+        $mform->addElement('text', 'url', get_string('environmenturl', 'extintmaxx'));
+        $mform->setType('url', PARAM_TEXT);
+        $mform->addHelpButton('url', 'environmenturl', 'extintmaxx');
 
         $this->add_action_buttons(
             false,

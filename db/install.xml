@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="mod/extintmaxx/db" VERSION="20250418" COMMENT="XMLDB file for Moodle mod/extintmaxx"
+<XMLDB PATH="mod/extintmaxx/db" VERSION="20250723" COMMENT="XMLDB file for Moodle mod/extintmaxx"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -43,6 +43,7 @@
         <FIELD NAME="provider" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Provider for the listed credentials"/>
         <FIELD NAME="providerusername" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Username/email field for the selected provider's API access"/>
         <FIELD NAME="providerpassword" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Password field for the selected provider's API access."/>
+        <FIELD NAME="url" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Environment url used by API calls (optional)"/>
         <FIELD NAME="apikey" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="API key provided as credentials for provider's API access"/>
         <FIELD NAME="apitoken" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="API access token returned by provider after initialization."/>
         <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Shows the creation date of entry (for debugging and logging purposes)."/>
