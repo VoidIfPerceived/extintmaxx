@@ -38,6 +38,8 @@ defined('MOODLE_INTERNAL') || die();
 /** Admin Forms */
     $string['apikey'] = 'API Key';
     $string['apikey_help'] = 'Enter the API Token for the External Provider you would like to integrate with.';
+    $string['profile'] = 'Profiles';
+    $string['profile_help'] = 'Select a previously saved profile';
     $string['name'] = 'Profile Name';
     $string['name_help'] = 'Enter the name that this set of credentials will be referred to as.';
     $string['providersselection'] = 'Providers';

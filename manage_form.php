@@ -17,18 +17,31 @@ defined('MOODLE_INTERNAL') || die();
 
 class mod_extintmaxx_manage_form extends moodleform {
     public function definition() {
-        global $CFG, $DB;
+        global $CFG, $DB, $PAGE;
         $mform = $this->_form;
+
+    $profile = $this->_customdata['profile'] ?? null;
+        $provider = $this->_customdata['provider'] ?? 'acci';
 
         $provideroptions = array(
             'acci' => get_string('acci', 'extintmaxx'),
             // 'nali' => get_string('nali', 'extintmaxx')
         );
 
-        $profilelist = $DB->get_records('extintmaxx_admin', null, 'name ASC', 'id, name');
+        // Build an options array for the profile select: id => name.
+        $profilelist = array();
+        $profilerecords = $DB->get_records('extintmaxx_admin', null, 'id', 'id, name');
+        foreach ($profilerecords as $p) {
+            $profilelist[$p->id] = $p->name;
+        }
 
-        $mform->addElement('select', 'provider', get_string('providersselection', 'extintmaxx'), $provideroptions);
+        $providerelement = $mform->addElement('select', 'provider', get_string('providersselection', 'extintmaxx'), $provideroptions);
         $mform->addHelpButton('provider', 'providersselection', 'extintmaxx');
+        $providerelement->setSelected($this->_customdata['provider']);
+
+    $profileelement = $mform->addElement('select', 'profile', get_string('profile', 'extintmaxx'), $profilelist);
+        $mform->addHelpButton('profile', 'profile', 'extintmaxx');
+    $profileelement->setSelected($this->_customdata['profile']);
 
         $mform->addElement('text', 'name', get_string('name', 'extintmaxx'));
         $mform->setType('name', PARAM_TEXT);
@@ -50,7 +63,7 @@ class mod_extintmaxx_manage_form extends moodleform {
             false,
             get_string('insertprovidercredentials', 'extintmaxx')
         );
-        
-        // $mform->addElement('submit', 'mod_extintmaxx_manage_form', get_string('insertprovidercredentials', 'extintmaxx'));
+
+        // On change of provider selection, update the form fields:
     }
 }
