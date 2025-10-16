@@ -31,7 +31,6 @@ class mod_extintmaxx_manage_form extends moodleform {
         // Build an options array for the profile select: id => name.
         $profilelist = array();
         $recordexists = $DB->record_exists('extintmaxx_admin', []);
-        print_r($recordexists);
         if ($recordexists) {
             $profilerecords = $DB->get_records('extintmaxx_admin', null, 'id', 'id, name');
             foreach ($profilerecords as $p) {
