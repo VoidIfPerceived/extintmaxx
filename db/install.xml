@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="mod/extintmaxx/db" VERSION="20250723" COMMENT="XMLDB file for Moodle mod/extintmaxx"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="extintmaxx" COMMENT="Table containing the module data for instances of the External Integration for Maxx plugin.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="course the activity is attached to."/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Name of the activity instance"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The timestamp of when the activity was last modified."/>
+        <FIELD NAME="intro" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Holds the activity description."/>
+        <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" SEQUENCE="false" COMMENT="Holds the format of the field"/>
+        <FIELD NAME="provider" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Provider used for the instance."/>
+        <FIELD NAME="providercourseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The external id of the course from the provider for this instance."/>
+        <FIELD NAME="grade" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Max points an External Integration for Maxx instance is worth."/>
+        <FIELD NAME="referraltypeid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="The referral type id for the activity."/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="The course id given by the provider in which the user is enrolled in."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="extintmaxx_user" COMMENT="Table containing the user information for OAuth connection using the External Integration for MaxxContent Plugin.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="provider" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="The provider to which the user is attempting to log in using the External Integration for MaxxContent plugin."/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Moodle's user id of the student whose access credentials are stored, used for reference between Moodle's user table and Extintmaxx's user table."/>
+        <FIELD NAME="redirecturl" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="The redirect_url for the user attempting to access courses using the External Integration for MaxxContent plugin."/>
+        <FIELD NAME="provideruserid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The id of the user within the provider's data structure."/>
+        <FIELD NAME="providercourseid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="The course id given by the provider in which the user is enrolled in."/>
+        <FIELD NAME="instanceid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="The instance within Moodle a student's information is used for."/>
+        <FIELD NAME="currentframeid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="The current frame id for the stored provider course."/>
+        <FIELD NAME="previousframeid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Previous frame id for the stored provider course"/>
+        <FIELD NAME="nextframeid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Next frame id for the stored provider course"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="extintmaxx_admin" COMMENT="Admin TABLE for External Integration for Maxx Content Plugin.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="provider" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Provider for the listed credentials"/>
+        <FIELD NAME="providerusername" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Username/email field for the selected provider's API access"/>
+        <FIELD NAME="providerpassword" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Password field for the selected provider's API access."/>
+        <FIELD NAME="url" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Environment url used by API calls (optional)"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Name for the set of credentials"/>
+        <FIELD NAME="apikey" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="API key provided as credentials for provider's API access"/>
+        <FIELD NAME="apitoken" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="API access token returned by provider after initialization."/>
+        <FIELD NAME="remembertoken" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Remember Token Specific to certain services."/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Shows the creation date of entry (for debugging and logging purposes)."/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The time this entry was last modified (for debugging and logging purposes)."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="extintmaxx_provider" COMMENT="Provided info for the accessible courses of a given provider.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="referraltypeid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="The referral type id for the course."/>
+        <FIELD NAME="provider" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Provider providing the course."/>
+        <FIELD NAME="providercourseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Course ID for the provided course."/>
+        <FIELD NAME="courseguid" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="The guid for the provided course."/>
+        <FIELD NAME="providercoursename" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="The name of the provided course."/>
+        <FIELD NAME="providercoursedesc" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Description of the provided course."/>
+        <FIELD NAME="provider_id" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="ID of the login information"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+  </TABLES>
+</XMLDB>
