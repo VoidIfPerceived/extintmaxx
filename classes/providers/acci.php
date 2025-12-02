@@ -41,22 +41,34 @@ class acci {
 
     }
 
-    function status_message($status, $message) {
-        "Status: $status<br>Message: $message<br>";
+    /** Set standard options for endpoint requests 
+     * @return array $options Standard CURL options
+    */
+    function standard_options () {
+        return $options = array(
+            "CURLOPT_FOLLOWLOCATION" => true,
+            "CURLOPT_RETURNTRANSFER" => true,
+        );
     }
-    /** Gets all courses available to an admin
-     *  @param string $username **REQUIRED** admin username
-     *  @param string $password **REQUIRED** admin password
-     *  @return object $responsedata API Response in object format
+
+    /** Return status message
+     * @param string $status Status Code of API request
+     * @param string $message Message from API request
+     * @return string Status and Message formatted for output
+     */
+    function status_message($status, $message) {
+        return "Status: $status<br>Message: $message<br>";
+    }
+
+    /** Confirms admin credentials with ACCI API and retrieves admin information
+     *  @param string $username **REQUIRED** Admin username
+     *  @param string $password **REQUIRED** Admin password
+     *  @param string $url *Optional* Custom URL for ACCI API
+     *  @return object $responsedata API Response
      */
     function admin_login($username, $password, $url = null) {
         $curl = new curl();
         $adminendpoint = "/api/adminLogin/";
-
-        $options = array(
-            "CURLOPT_FOLLOWLOCATION" => true,
-            "CURLOPT_RETURNTRANSFER" => true,
-        );
 
         $data = array(
             "email" => $username,
@@ -75,30 +87,26 @@ class acci {
 
         $curl->setHeader($header);
 
-        /**
-         *  @var string $response CURL Response from API, Returns the following data on success:
-         *  @param string $url Full Method URL
-         *  @param array $data Data sent to API
-         *  @param array $options CURL options
-         *  - @return bool status code (status)
-         *  - @return string message (message)
-         *  - @return array data array (data):
-         *      - @return string token (token)
-         *      - @return string token expiration (expires_at)
-         *      - @return array user info array (user)
-         *          - @return string remember token (remember_token)
-         *          - @return int superadmin id (superadmin_id)
-         */
+        $response = $curl->post($url, $data, $this->standard_options());
 
-        $response = $curl->post($url, $data, $options);
-
-        if ($response == false) {
+        if (!$response) {
             echo "Admin Login Curl Error: ";
             $error = $curl->error;
             echo $error;
             return;
         }
 
+        /**
+         * @var object $responsedata Returns the following data on success:
+         * @return bool status code (status)
+         * @return string message (message)
+         * @return array data array (data):
+         * - @return string token (token)
+         * - @return string token expiration (expires_at)
+         * - @return array user info array (user)
+         *   - @return string remember token (remember_token)
+         *   - @return int superadmin id (superadmin_id)
+         */
         $responsedata = json_decode($response);
 
         $adminstatus = $responsedata->status==true ? "Success" : "Error";
@@ -115,21 +123,18 @@ class acci {
         $curl = new curl();
         $referraltypesendpoint = "/api/getReferralTypesByAdmin";
 
-        $options = array(
-            "CURLOPT_FOLLOWLOCATION" => true,
-            "CURLOPT_RETURNTRANSFER" => true,
-        );
-
         $header = array(
             'accept: application/json',
             'Authorization: Bearer '.$token
         );
 
-        if ($url == null) {
-            $url = $this->accicoreurl;
-        }
+        $data = array(
+            "token" => $token
+        );
 
-        $url = "{$url}{$referraltypesendpoint}";
+        $url == null ? $baseurl = $this->accicoreurl : $baseurl = $url;
+
+        $url = "{$baseurl}{$referraltypesendpoint}";
 
         $curl->setHeader($header);
 
@@ -151,7 +156,7 @@ class acci {
          *          - @return string referral type description (description)
          *          - @return string referral type icon (icon)
          */
-        $response = $curl->get($url, $data = null, $options);
+        $response = $curl->get($url, $data, $this->standard_options());
 
         if ($response == false) {
             echo "Admin Login Curl Error: ";
@@ -186,18 +191,14 @@ class acci {
         $curl = new curl();
         $getallcoursesendpoint = "/api/getAllCourses";
 
-        $options = array(
-            "CURLOPT_FOLLOWLOCATION" => true,
-            "CURLOPT_RETURNTRANSFER" => true,
-        );
-
         $header = array(
             'accept: application/json',
             'Authorization: Bearer '.$token
         );
 
         $data = array(
-            "id" => $referraltypeid
+            "id" => $referraltypeid,
+            "token" => $token
         );
 
         if ($url == null) {
@@ -208,7 +209,7 @@ class acci {
 
         $curl->setHeader($header);
 
-        $response = $curl->post($url, $data, $options);
+        $response = $curl->post($url, $data, $this->standard_options());
 
         if ($response == false) {
             echo "Admin Login Curl Error: ";

@@ -66,6 +66,7 @@
         <FIELD NAME="courseguid" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="The guid for the provided course."/>
         <FIELD NAME="providercoursename" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="The name of the provided course."/>
         <FIELD NAME="providercoursedesc" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Description of the provided course."/>
+        <FIELD NAME="profile_id" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="The profile id for the provided course."/>
         <FIELD NAME="provider_id" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="ID of the login information"/>
       </FIELDS>
       <KEYS>

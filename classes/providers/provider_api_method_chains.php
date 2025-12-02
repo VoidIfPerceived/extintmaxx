@@ -206,22 +206,25 @@ class provider_api_method_chains {
         $admintoken = $adminlogin->data->token;
         $courses = array();
 
-        $referraltypesbyadmin = $acci->get_referral_types_by_admin($admintoken, $url);
+        $referral = $acci->get_referral_types_by_admin($admintoken, $url);
 
-        $referral = $acci->get_referral_types_by_admin($admintoken, $url)->data[0]->referraltype_id;
-        $getallcourses = $acci->get_all_courses($admintoken, $referral, $url);
+        $referraltypeid = $referral->data[0]->referraltype_id;
+
+        $getallcourses = $acci->get_all_courses($admintoken, $referraltypeid, $url);
 
         foreach ($getallcourses->data as $course) {
             $coursedata = [
                 'provider' => $adminrecord->provider,
-                'referraltypeid' => $referral,
+                'referraltypeid' => $referraltypeid,
                 'providercourseid' => $course->course_id,
                 'courseguid' => $course->guid,
                 'providercoursename' => $adminrecord->name . " - " . $course->course->title,
                 'providercoursedesc' => $course->course->description,
                 'profile_id' => $adminrecord->id
             ];
+
             $courses = $this->provider_record_exists($adminrecord->id, $coursedata['providercourseid']);
+
             if ($courses) {
                 foreach ($courses as $course) {
                     if ($course->profile_id == NULL) {
