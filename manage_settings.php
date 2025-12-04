@@ -24,6 +24,8 @@ echo $OUTPUT->heading(get_string('extintmaxx_settings', 'extintmaxx'));
 $methodchains = new provider_api_method_chains();
 $acci = new acci();
 
+echo $methodchains->get_all_provider_courses();
+
 function get_matching_provider_records($formdata) {
     global $DB;
     $records = $DB->get_records(

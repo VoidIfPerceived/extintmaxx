@@ -156,7 +156,7 @@ class acci {
          *          - @return string referral type description (description)
          *          - @return string referral type icon (icon)
          */
-        $response = $curl->get($url, $data, $this->standard_options());
+        $response = $curl->post($url, $data, $this->standard_options());
 
         if ($response == false) {
             echo "Admin Login Curl Error: ";

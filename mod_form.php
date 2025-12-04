@@ -25,11 +25,22 @@
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
 require_once($CFG->dirroot.'/mod/extintmaxx/lib.php');
 
+$profile = optional_param('profile', null, PARAM_INT);
+
 use mod_extintmaxx\providers\provider_api_method_chains;
 
 class mod_extintmaxx_mod_form extends \moodleform_mod {
     function definition() {
-        $provideroptions = array(
+        $methodchains = new provider_api_method_chains();
+
+        $coursesarray = array();
+
+        $allcourses = $methodchains->get_all_provider_courses();
+        foreach ($allcourses as $course) {
+            $coursesarray[$course->id] = $course->providercoursename;
+        }
+
+        $profiles = array(
             'acci' => get_string('acci', 'extintmaxx'),
             // 'nali' => get_string('nali', 'extintmaxx')
         );
@@ -40,10 +51,7 @@ class mod_extintmaxx_mod_form extends \moodleform_mod {
 
         $mform->addElement('header', 'externalcourseselection', get_string('pluginspecificheader', 'extintmaxx'));
 
-        $mform->addElement('select', 'provider', get_string('providersselection', 'extintmaxx'), $provideroptions);
-        $mform->addHelpButton('provider', 'providersselection', 'extintmaxx');
-
-        $mform->addElement('select', 'providercourse', get_string('providercourse', 'extintmaxx'), $this->get_all_provider_courses('acci'));
+        $mform->addElement('select', 'providercourse', get_string('providercourse', 'extintmaxx'), $coursesarray);
         $mform->addHelpButton('providercourse', 'providercourse', 'extintmaxx');
 
         $mform->addElement('header', 'grading', get_string('grading', 'extintmaxx'));
@@ -53,29 +61,5 @@ class mod_extintmaxx_mod_form extends \moodleform_mod {
         $mform->addHelpButton('grade', 'grade', 'extintmaxx');
 
         $this->add_action_buttons();
-
-    }
-
-        /**
-     *  Get all courses for the selected provider.
-     *  Get the name of the courses and the course description.
-     *  @return array $courses
-     */
-    function get_all_provider_courses($provider) {
-        global $DB;
-        $methodchains = new provider_api_method_chains();
-
-        $providercourses = $methodchains->provider_record_exists($provider);
-        if ($providercourses) {
-            $courses = array();
-            foreach ($providercourses as $course) {
-                $providercourseid = $course->providercourseid;
-                $providercoursename = $course->providercoursename;
-                $courses[$providercourseid] = $providercoursename;  
-            }
-            return $courses;
-        } else {
-            return false;
-        }
     }
 }

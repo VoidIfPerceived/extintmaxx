@@ -29,6 +29,13 @@ class provider_api_method_chains {
             return $adminrecord;
         }
     }
+
+    function get_all_profiles() {
+        global $DB;
+        $profiles = $DB->get_records('extintmaxx_admin', null, 'id ASC', 'id, name');
+        return $profiles;
+    }
+
     /** Checks whether a database entry for the specified course(s) for a provider exist within the plugin */
     function provider_record_exists($profileid, $course=null) {
         global $DB;
@@ -87,7 +94,7 @@ class provider_api_method_chains {
 
     function random_string($length = 24, $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-?!@#$^*()') {
         if ($length < 1) {
-            throw new coding_exception("Length must be a positive integer");
+            throw new exception("Length must be a positive integer");
         }
         $pieces = array();
         $maxlength = mb_strlen($keyspace, '8bit') - 1;
@@ -204,6 +211,7 @@ class provider_api_method_chains {
         $url = $adminrecord->url;
         $adminlogin = $acci->admin_login($adminrecord->providerusername, $adminrecord->providerpassword, $url);
         $admintoken = $adminlogin->data->token;
+
         $courses = array();
 
         $referral = $acci->get_referral_types_by_admin($admintoken, $url);
@@ -282,5 +290,50 @@ class provider_api_method_chains {
         }
 
         return $studentdata;
+    }
+
+    /**
+     *  Get all courses for the selected provider.
+     *  Get the name of the courses and the course description.
+     *  @return array $courses
+     */
+    function get_all_provider_courses() {
+        global $DB;
+
+        $profiles = $this->get_all_profiles();
+
+        $profilesarray = array();
+
+        if (!$profiles) {
+            return false;
+        }
+
+        foreach ($profiles as $profile) {
+            $profilesarray[$profile->id] = $profile->name;
+        }
+
+        $providercourses = array();
+
+        foreach ($profilesarray as $key => $profile) {
+            $profilecourses = $this->provider_record_exists($key);
+
+            foreach ($profilecourses as $course) {
+                $providercourses[] = $course;
+            }
+        }
+
+        if ($providercourses > 0) {
+            $courses = array();
+            foreach ($providercourses as $course) {
+                $data = new stdClass;
+                $data->id = $course->id;
+                $data->providercourseid = $course->providercourseid;
+                $data->providercoursename = $course->providercoursename;
+                $courses[] = $data;
+            }
+            return $courses;
+        } else {
+            return false;
+        }
     }
 }
