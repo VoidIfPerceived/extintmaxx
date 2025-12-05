@@ -23,6 +23,7 @@ function extintmaxx_add_instance($instancedata, $mform = null) {
         return false;
     }
 
+    $instancedata->profile_id = $selectedcourse->profile_id;
     $instancedata->provider = $selectedcourse->provider;
     $instancedata->providercourseid = $selectedcourse->providercourseid;
     $instancedata->providercoursename = $selectedcourse->providercoursename;

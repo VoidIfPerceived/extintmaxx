@@ -12,8 +12,9 @@ $courseid = $_REQUEST['id'];
 $instanceid = $_REQUEST['instance'];
 $userid = $_REQUEST['userid'];
 
+$instance = $DB->get_record('extintmaxx', array('id' => $instanceid), '*', MUST_EXIST);
 $acciuserid = $DB->get_record('extintmaxx_user', array('userid' => $userid, 'instanceid' => $instanceid), 'provideruserid', MUST_EXIST);
-$provider = $DB->get_record('extintmaxx_admin', array('provider' => 'acci'), '*', MUST_EXIST);
+$profile = $DB->get_record('extintmaxx_admin', array('id' => $instance->profile_id), '*', MUST_EXIST);
 
 $module = $DB->get_record('extintmaxx', array('id' => $instanceid), '*', MUST_EXIST);
 $returnurl = new moodle_url('/course/view.php', array('id' => $courseid));

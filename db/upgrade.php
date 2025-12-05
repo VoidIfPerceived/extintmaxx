@@ -134,5 +134,21 @@ function xmldb_extintmaxx_upgrade($oldversion): bool {
         }
     }
 
+        if ($oldversion < 2025120400) {
+
+        // Define field profile_id to be added to extintmaxx.
+        $table = new xmldb_table('extintmaxx');
+        $field = new xmldb_field('profile_id', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'courseid');
+
+        // Conditionally launch add field profile_id.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Extintmaxx savepoint reached.
+        upgrade_mod_savepoint(true, 2025120400, 'extintmaxx');
+    }
+
+
     return true;
 };

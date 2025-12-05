@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Activity creation/editing form for the mod_[modname] plugin.
+ * Activity creation/editing form for the mod_extintmaxx plugin.
  *
  * @package   mod_extintmaxx
  * @copyright 2025, Sophi Dickens <sophidickens.e@gmail.com>

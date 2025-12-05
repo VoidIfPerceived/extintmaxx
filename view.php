@@ -25,8 +25,8 @@ $cmid = required_param('id', PARAM_INT);
 $cm = get_coursemodule_from_id('extintmaxx', $cmid, 0, false, MUST_EXIST);
 $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
 $module = $DB->get_record('extintmaxx', array('id' => $cm->instance), '*', MUST_EXIST);
-$provider = $DB->get_record('extintmaxx_admin', array('provider' => $module->provider), '*');
-$providercourse = $methodchains->provider_record_exists($provider->provider, $module->providercourseid);
+$profile = $DB->get_record('extintmaxx_admin', array('id' => $module->profile_id), '*');
+$providercourse = $methodchains->provider_record_exists($profile->provider, $module->providercourseid);
 
 $PAGE->set_context(context_system::instance());
 
@@ -145,20 +145,22 @@ $PAGE->set_title('External Integration for Maxx Content');
 
 echo $OUTPUT->header();
 
+print_r($module);
+
 if (has_capability('mod/extintmaxx:basicreporting', $context = context_course::instance($cm->course))) {
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
     admin_actions($course->id);
 } else {
-    $adminlogin = $acci->admin_login($provider->providerusername, $provider->providerpassword, $provider->url);
+    $adminlogin = $acci->admin_login($profile->providerusername, $profile->providerpassword, $profile->url);
     $acciuserid = $DB->get_record(
         'extintmaxx_user',
-        array('userid' => $USER->id, 'provider' => $provider->provider, 'instanceid' => $module->id)
+        array('userid' => $USER->id, 'provider' => $profile->provider, 'instanceid' => $module->id)
     );
-    $providerstudent = $methodchains->student_login($USER->id, $provider->provider, $module, $module->id, $provider->url);
+    $providerstudent = $methodchains->student_login($USER->id, $profile->provider, $module, $module->id, $profile->url);
     $redirecturl = get_redirect_url($providerstudent);
-    $courseforwardurl = acci_course_url($providerstudent, $module, $provider);
-    $logout = $acci->student_logout($acciuserid->provideruserid, $adminlogin->data->user->superadmin->consumer_key, $provider->url);
+    $courseforwardurl = acci_course_url($providerstudent, $module, $profile);
+    $logout = $acci->student_logout($acciuserid->provideruserid, $adminlogin->data->user->superadmin->consumer_key, $profile->url);
     $PAGE->set_context(context_system::instance());
     $PAGE->set_pagelayout('incourse');
     echo exit_activity_button($cm->course, $module->id);

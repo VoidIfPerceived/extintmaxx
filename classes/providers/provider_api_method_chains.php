@@ -118,15 +118,18 @@ class provider_api_method_chains {
         $acci = new acci();
         //Parse initial data
         $admintoken = $adminlogin->data->token;
+
         $remembertoken = $adminlogin->data->user->remember_token;
+
         $adminid = $adminlogin->data->user->id;
         /** @todo $provider->statecode Field does not exist within Database */
         // $statecode = $provider->statecode;
         /** @todo $statecode Add (US) State Code to Admin Form */
         $statecode = 'GA';
 
-        $referraltypes = $acci->get_referral_types_by_admin($admintoken, $url);
-        $referraltypeid = $referraltypes->data[0]->referraltype_id;
+        $referral = $acci->get_referral_types_by_admin($admintoken, $url);
+
+        $referraltypeid = $referral->data[0]->referraltype_id;
 
         $getagencies = $acci->get_agency_by_state_id($admintoken, $statecode, $url);
 
