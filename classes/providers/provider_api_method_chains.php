@@ -139,7 +139,8 @@ class provider_api_method_chains {
 
         $password = random_string();
 
-        $enrolledstudent = $acci->new_student_enrollment(
+
+        print_r($enrolledstudent = $acci->new_student_enrollment(
             $admintoken,
             $USER->firstname,
             $USER->lastname,
@@ -156,7 +157,8 @@ class provider_api_method_chains {
             null,
             null,
             $url
-        );
+        ));
+
 
         $newstudentrecord = new stdClass;
         $newstudentrecord->provider = $provider->provider;
@@ -170,6 +172,8 @@ class provider_api_method_chains {
         // $newstudentrecord->studenttoken = $enrolledstudent->data->token;
         // $newstudentrecord->studentremembertoken = $enrolledstudent->data->remember_token;
         // $newstudentrecord->mobileredirecturl = $enrolledstudent->data->mobileRedirectUrl;
+
+        print_r($newstudentrecord);
 
         $DB->insert_record('extintmaxx_user', $newstudentrecord);
         return $newstudentrecord;
@@ -194,17 +198,18 @@ class provider_api_method_chains {
             )
         );
         if ($adminrecord && $studentrecord == null) {
-            //If user has an entry for this provider in the database
-            //Return student info
+            //User does not have a record in the database for this provider
+            //Provider exists
+            //Add new data and submit to API
             return $this->enroll_student($acci->admin_login($adminrecord->providerusername, $adminrecord->providerpassword, $url), $adminrecord, $module, $url);
-        } else if ($adminrecord && $studentrecord && $studentrecord->providercourseid != $module->providercourseid) {
+        } else if ($adminrecord && $studentrecord && $studentrecord->providercourseid != $module->providercourseid || $studentrecord->instanceid != $module->id) {
             //If user has an entry for this provider in the database
             //Return student info
             return $this->enroll_student($acci->admin_login($adminrecord->providerusername, $adminrecord->providerpassword, $url), $adminrecord, $module, $url);
         } else if ($adminrecord && $studentrecord) {
             return $studentrecord;
-            //If user does not have an entry for this provider in the database
-            //Parse new data and submit to API 
+            //User has a record for this provider in the database
+            //Return student info
         }
     }
 

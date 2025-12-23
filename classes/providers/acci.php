@@ -34,7 +34,7 @@ class acci {
     /**
      * @var string $accicoreurl Base URL for ACCI API
      */
-    private $accicoreurl = "https://developer.lifeskillslink.com";
+    private $accicoreurl = "https://www.lifeskillslink.com";
 
     /** Constructor for the ACCI class */
     function __construct() {
@@ -123,13 +123,17 @@ class acci {
         $curl = new curl();
         $referraltypesendpoint = "/api/getReferralTypesByAdmin";
 
+        print_r(
         $header = array(
             'accept: application/json',
             'Authorization: Bearer '.$token
+        )
         );
 
+        print_r(
         $data = array(
             "token" => $token
+        )
         );
 
         $url == null ? $baseurl = $this->accicoreurl : $baseurl = $url;
@@ -554,6 +558,7 @@ class acci {
             'Authorization: Bearer '.$admintoken
         );
 
+        print_r(
         $data = array(
             'firstname' => $firstname,
             'lastname' => $lastname,
@@ -569,8 +574,7 @@ class acci {
             'coachname' => $coachname,
             'coachemail' => $coachemail,
             'coachphone' => $coachphone 
-        );
-
+        ));
         if ($url == null) {
             $url = $this->accicoreurl;
         }
@@ -589,6 +593,7 @@ class acci {
         }
 
         $responsedata = json_decode($response);
+
         $newstudentenrollmentstatus = $responsedata->status==true ? "Success" : "Error";
         $newstudentenrollmentmessage = $responsedata->message;
         $this->status_message($newstudentenrollmentstatus, $newstudentenrollmentmessage);
@@ -796,7 +801,7 @@ class acci {
      * Admin Login
      *  
      */
-    function student_logout($userid, $consumerkey, $url = null) {
+    function student_logout($userid, $consumerkey, $admintoken, $url = null) {
         $curl = new curl();
         $studentlogoutendpoint = "/api/moodle_logout/";
 
@@ -807,7 +812,7 @@ class acci {
 
         $header = array(
             'accept: application/json',
-            'Authorization: Bearer '.$consumerkey
+            'Authorization: Bearer '.$admintoken
         );
 
         $data = array(

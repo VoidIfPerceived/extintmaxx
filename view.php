@@ -108,6 +108,8 @@ function generate_iframe($redirecturl, $courseforwardurl) {
                 width:100%;
                 left:0;
                 scrolling:no;\"
+                loading=\"eager\"
+                sandbox=\"allow-top-navigation, allow-same-origin\"
                 src=\"$redirecturl\">
             </iframe>
         </div>
@@ -119,7 +121,7 @@ function iframe_course_redirect($courseforwardurl) {
     return "<script>
             iframe = document.getElementById('viewurl');
             addEventListener('load', function() {
-                iframe = iframe.contentWindow.location.href = '$courseforwardurl';
+                iframe.src = '$courseforwardurl';
             });
             </script>";
 }
@@ -145,8 +147,6 @@ $PAGE->set_title('External Integration for Maxx Content');
 
 echo $OUTPUT->header();
 
-print_r($module);
-
 if (has_capability('mod/extintmaxx:basicreporting', $context = context_course::instance($cm->course))) {
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
@@ -157,14 +157,15 @@ if (has_capability('mod/extintmaxx:basicreporting', $context = context_course::i
         'extintmaxx_user',
         array('userid' => $USER->id, 'provider' => $profile->provider, 'instanceid' => $module->id)
     );
+    // $logout = $acci->student_logout($acciuserid->provideruserid, $adminlogin->data->user->superadmin->consumer_key, $profile->url);
+    // print_r($logout);
     $providerstudent = $methodchains->student_login($USER->id, $profile->provider, $module, $module->id, $profile->url);
     $redirecturl = get_redirect_url($providerstudent);
     $courseforwardurl = acci_course_url($providerstudent, $module, $profile);
-    $logout = $acci->student_logout($acciuserid->provideruserid, $adminlogin->data->user->superadmin->consumer_key, $profile->url);
     $PAGE->set_context(context_system::instance());
     $PAGE->set_pagelayout('incourse');
     echo exit_activity_button($cm->course, $module->id);
-    view_page($redirecturl, $courseforwardurl);
+    echo view_page($redirecturl, $courseforwardurl);
     echo iframe_course_redirect($courseforwardurl);
 }
 
