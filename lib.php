@@ -14,7 +14,6 @@ function extintmaxx_add_instance($instancedata, $mform = null) {
     global $DB;
     $methodchains = new provider_api_method_chains();
 
-    print_r($instancedata);
     $selectedcourse = $DB->get_record('extintmaxx_provider', ['id' => $instancedata->providercourse], '*', MUST_EXIST);
 
     $adminrecord = $DB->get_record('extintmaxx_admin', ['id' => $selectedcourse->profile_id], '*', MUST_EXIST);

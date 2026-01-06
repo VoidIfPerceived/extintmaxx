@@ -123,17 +123,13 @@ class acci {
         $curl = new curl();
         $referraltypesendpoint = "/api/getReferralTypesByAdmin";
 
-        print_r(
         $header = array(
             'accept: application/json',
             'Authorization: Bearer '.$token
-        )
         );
 
-        print_r(
         $data = array(
             "token" => $token
-        )
         );
 
         $url == null ? $baseurl = $this->accicoreurl : $baseurl = $url;
@@ -558,7 +554,6 @@ class acci {
             'Authorization: Bearer '.$admintoken
         );
 
-        print_r(
         $data = array(
             'firstname' => $firstname,
             'lastname' => $lastname,
@@ -574,7 +569,7 @@ class acci {
             'coachname' => $coachname,
             'coachemail' => $coachemail,
             'coachphone' => $coachphone 
-        ));
+        );
         if ($url == null) {
             $url = $this->accicoreurl;
         }
