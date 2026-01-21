@@ -214,6 +214,9 @@ class provider_api_method_chains {
     function update_provider_courses($adminrecordid) {
         global $DB;
         $acci = new acci();
+        if (is_object($adminrecordid)) {
+            $adminrecordid = $adminrecordid->id;
+        }
         $adminrecord = $DB->get_record(
             'extintmaxx_admin',
             array('id' => $adminrecordid)
