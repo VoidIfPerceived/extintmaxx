@@ -211,9 +211,13 @@ class provider_api_method_chains {
         }
     }
 
-    function update_provider_courses($adminrecord) {
+    function update_provider_courses($adminrecordid) {
         global $DB;
         $acci = new acci();
+        $adminrecord = $DB->get_record(
+            'extintmaxx_admin',
+            array('id' => $adminrecordid)
+        );
         $url = $adminrecord->url;
         $adminlogin = $acci->admin_login($adminrecord->providerusername, $adminrecord->providerpassword, $url);
         $admintoken = $adminlogin->data->token;
