@@ -87,11 +87,16 @@ class acci {
 
         $curl->setHeader($header);
 
-        $response = $curl->post($url, $data, $this->standard_options());
+        $response = null;
 
-        if (!$response) {
+        for ($i = 0; $i <= 10 && $response == null; $i++) {
+            sleep($i/2); // Inverse Exponential : 0s, 0.5s, 1s, 1.5s, 2s, 2.5s, 3s, 3.5s, 4s, 4.5s, 5s : 27.5s max wait time 
+            $response = $curl->post($url, $data, $this->standard_options());
+        }
+
+        if ($response == null || false) {
             echo "Admin Login Curl Error: ";
-            $error = $curl->error;
+            $error = $curl->error || 'Unknown Curl Error: No response received';
             echo $error;
             return;
         }
@@ -156,11 +161,17 @@ class acci {
          *          - @return string referral type description (description)
          *          - @return string referral type icon (icon)
          */
-        $response = $curl->get($url, $data, $this->standard_options());
 
-        if ($response == false) {
+        $response = null;
+
+        for ($i = 0; $i <= 10 && $response == null; $i++) {
+            sleep($i/2); // Inverse Exponential : 0s, 0.5s, 1s, 1.5s, 2s, 2.5s, 3s, 3.5s, 4s, 4.5s, 5s : 27.5s max wait time 
+            $response = $curl->post($url, $data, $this->standard_options());
+        }
+
+        if ($response == null) {
             echo "Admin Login Curl Error: ";
-            $error = $curl->error;
+            $error = $curl->error || 'Unknown Curl Error: No response received';
             echo $error;
             return;
         }
@@ -209,11 +220,16 @@ class acci {
 
         $curl->setHeader($header);
 
-        $response = $curl->post($url, $data, $this->standard_options());
+        $response = null;
 
-        if ($response == false) {
+        for ($i = 0; $i <= 10 && $response == null; $i++) {
+            sleep($i/2); // Inverse Exponential : 0s, 0.5s, 1s, 1.5s, 2s, 2.5s, 3s, 3.5s, 4s, 4.5s, 5s : 27.5s max wait time 
+            $response = $curl->post($url, $data, $this->standard_options());
+        }
+
+        if ($response == null || false) {
             echo "Admin Login Curl Error: ";
-            $error = $curl->error;
+            $error = $curl->error || 'Unknown Curl Error: No response received';
             echo $error;
             return;
         }
@@ -278,11 +294,16 @@ class acci {
 
         $curl->setHeader($header);
 
-        $response = $curl->post($url, $data, $options);
+        $response = null;
 
-        if ($response == false) {
+        for ($i = 0; $i <= 10 && $response == null; $i++) {
+            sleep($i/2); // Inverse Exponential : 0s, 0.5s, 1s, 1.5s, 2s, 2.5s, 3s, 3.5s, 4s, 4.5s, 5s : 27.5s max wait time 
+            $response = $curl->post($url, $data, $this->standard_options());
+        }
+
+        if ($response == null || false) {
             echo "Admin Login Curl Error: ";
-            $error = $curl->error;
+            $error = $curl->error || 'Unknown Curl Error: No response received';
             echo $error;
             return;
         }
@@ -328,11 +349,16 @@ class acci {
 
         $curl->setHeader($header);
 
-        $response = $curl->post($url, $data, $options);
+        $response = null;
 
-        if ($response == false) {
+        for ($i = 0; $i <= 10 && $response == null; $i++) {
+            sleep($i/2); // Inverse Exponential : 0s, 0.5s, 1s, 1.5s, 2s, 2.5s, 3s, 3.5s, 4s, 4.5s, 5s : 27.5s max wait time 
+            $response = $curl->post($url, $data, $this->standard_options());
+        }
+
+        if ($response == null || false) {
             echo "Admin Login Curl Error: ";
-            $error = $curl->error;
+            $error = $curl->error || 'Unknown Curl Error: No response received';
             echo $error;
             return;
         }
@@ -373,11 +399,16 @@ class acci {
 
         $curl->setHeader($header);
 
-        $response = $curl->post($url, $data, $options);
+        $response = null;
 
-        if ($response == false) {
+        for ($i = 0; $i <= 10 && $response == null; $i++) {
+            sleep($i/2); // Inverse Exponential : 0s, 0.5s, 1s, 1.5s, 2s, 2.5s, 3s, 3.5s, 4s, 4.5s, 5s : 27.5s max wait time 
+            $response = $curl->post($url, $data, $this->standard_options());
+        }
+
+        if ($response == null || false) {
             echo "Admin Login Curl Error: ";
-            $error = $curl->error;
+            $error = $curl->error || 'Unknown Curl Error: No response received';
             echo $error;
             return;
         }
@@ -418,11 +449,16 @@ class acci {
 
         $curl->setHeader($header);
 
-        $response = $curl->post($url, $data, $options);
+        $response = null;
 
-        if ($response == false) {
+        for ($i = 0; $i <= 10 && $response == null; $i++) {
+            sleep($i/2); // Inverse Exponential : 0s, 0.5s, 1s, 1.5s, 2s, 2.5s, 3s, 3.5s, 4s, 4.5s, 5s : 27.5s max wait time 
+            $response = $curl->post($url, $data, $this->standard_options());
+        }
+
+        if ($response == null || false) {
             echo "Admin Login Curl Error: ";
-            $error = $curl->error;
+            $error = $curl->error || 'Unknown Curl Error: No response received';
             echo $error;
             return;
         }
@@ -498,11 +534,16 @@ class acci {
 
         $curl->setHeader($header);
 
-        $response = $curl->post($url, $data, $options);
+        $response = null;
 
-        if ($response == false) {
+        for ($i = 0; $i <= 10 && $response == null; $i++) {
+            sleep($i/2); // Inverse Exponential : 0s, 0.5s, 1s, 1.5s, 2s, 2.5s, 3s, 3.5s, 4s, 4.5s, 5s : 27.5s max wait time 
+            $response = $curl->post($url, $data, $this->standard_options());
+        }
+
+        if ($response == null || false) {
             echo "Admin Login Curl Error: ";
-            $error = $curl->error;
+            $error = $curl->error || 'Unknown Curl Error: No response received';
             echo $error;
             return;
         }
@@ -578,11 +619,16 @@ class acci {
 
         $curl->setHeader($header);
 
-        $response = $curl->post($url, $data, $options);
+        $response = null;
 
-        if ($response == false) {
+        for ($i = 0; $i <= 10 && $response == null; $i++) {
+            sleep($i/2); // Inverse Exponential : 0s, 0.5s, 1s, 1.5s, 2s, 2.5s, 3s, 3.5s, 4s, 4.5s, 5s : 27.5s max wait time 
+            $response = $curl->post($url, $data, $this->standard_options());
+        }
+
+        if ($response == null || false) {
             echo "Admin Login Curl Error: ";
-            $error = $curl->error;
+            $error = $curl->error || 'Unknown Curl Error: No response received';
             echo $error;
             return;
         }
@@ -659,11 +705,16 @@ class acci {
 
         $curl->setHeader($header);
 
-        $response = $curl->post($url, $data, $options);
+        $response = null;
 
-        if ($response == false) {
+        for ($i = 0; $i <= 10 && $response == null; $i++) {
+            sleep($i/2); // Inverse Exponential : 0s, 0.5s, 1s, 1.5s, 2s, 2.5s, 3s, 3.5s, 4s, 4.5s, 5s : 27.5s max wait time 
+            $response = $curl->post($url, $data, $this->standard_options());
+        }
+
+        if ($response == null || false) {
             echo "Admin Login Curl Error: ";
-            $error = $curl->error;
+            $error = $curl->error || 'Unknown Curl Error: No response received';
             echo $error;
             return;
         }
@@ -711,11 +762,16 @@ class acci {
 
         $curl->setHeader($header);
 
-        $response = $curl->post($url, $data, $options);
+        $response = null;
 
-        if ($response == false) {
+        for ($i = 0; $i <= 10 && $response == null; $i++) {
+            sleep($i/2); // Inverse Exponential : 0s, 0.5s, 1s, 1.5s, 2s, 2.5s, 3s, 3.5s, 4s, 4.5s, 5s : 27.5s max wait time 
+            $response = $curl->post($url, $data, $this->standard_options());
+        }
+
+        if ($response == null || false) {
             echo "Admin Login Curl Error: ";
-            $error = $curl->error;
+            $error = $curl->error || 'Unknown Curl Error: No response received';
             echo $error;
             return;
         }
@@ -773,11 +829,16 @@ class acci {
          *      - @return string admintoken (token)
          *      - @return string student auto login url (redirect_url)
          */
-        $response = $curl->post($url, $data, $options);
+        $response = null;
 
-        if ($response == false) {
+        for ($i = 0; $i <= 10 && $response == null; $i++) {
+            sleep($i/2); // Inverse Exponential : 0s, 0.5s, 1s, 1.5s, 2s, 2.5s, 3s, 3.5s, 4s, 4.5s, 5s : 27.5s max wait time 
+            $response = $curl->post($url, $data, $this->standard_options());
+        }
+
+        if ($response == null || false) {
             echo "Admin Login Curl Error: ";
-            $error = $curl->error;
+            $error = $curl->error || 'Unknown Curl Error: No response received';
             echo $error;
             return;
         }
@@ -835,11 +896,16 @@ class acci {
          *      - @return string student auto login url (redirect_url)
          */
 
-        $response = $curl->post($url, $data, $options);
+        $response = null;
 
-        if ($response == false) {
+        for ($i = 0; $i <= 10 && $response == null; $i++) {
+            sleep($i/2); // Inverse Exponential : 0s, 0.5s, 1s, 1.5s, 2s, 2.5s, 3s, 3.5s, 4s, 4.5s, 5s : 27.5s max wait time 
+            $response = $curl->post($url, $data, $this->standard_options());
+        }
+
+        if ($response == null || false) {
             echo "Admin Login Curl Error: ";
-            $error = $curl->error;
+            $error = $curl->error || 'Unknown Curl Error: No response received';
             echo $error;
             return;
         }
