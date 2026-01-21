@@ -140,7 +140,7 @@ class provider_api_method_chains {
         $password = random_string();
 
 
-        print_r($enrolledstudent = $acci->new_student_enrollment(
+        $enrolledstudent = $acci->new_student_enrollment(
             $admintoken,
             $USER->firstname,
             $USER->lastname,
@@ -157,7 +157,7 @@ class provider_api_method_chains {
             null,
             null,
             $url
-        ));
+        );
 
 
         $newstudentrecord = new stdClass;
@@ -172,8 +172,6 @@ class provider_api_method_chains {
         // $newstudentrecord->studenttoken = $enrolledstudent->data->token;
         // $newstudentrecord->studentremembertoken = $enrolledstudent->data->remember_token;
         // $newstudentrecord->mobileredirecturl = $enrolledstudent->data->mobileRedirectUrl;
-
-        print_r($newstudentrecord);
 
         $DB->insert_record('extintmaxx_user', $newstudentrecord);
         return $newstudentrecord;
