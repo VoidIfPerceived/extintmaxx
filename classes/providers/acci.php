@@ -56,8 +56,12 @@ class acci {
      * @param string $message Message from API request
      * @return string Status and Message formatted for output
      */
-    function status_message($status, $message) {
-        return "Status: $status<br>Message: $message<br>";
+    function status_message($status, $message, $time, $method) {
+        $statusmessage = "Method:$method<br> Status: $status<br>Message: $message<br>Time: $time processes<br>";
+        if ($status == "error") {
+            throw new \Exception("ACCI API Error: $statusmessage");
+        }
+        return $statusmessage;
     }
 
     /** Confirms admin credentials with ACCI API and retrieves admin information
@@ -87,11 +91,14 @@ class acci {
 
         $curl->setHeader($header);
 
+        $processtime = 0;
+
         $response = null;
 
         for ($i = 0; $i <= 10 && $response == null; $i++) {
             sleep($i/2); // Inverse Exponential : 0s, 0.5s, 1s, 1.5s, 2s, 2.5s, 3s, 3.5s, 4s, 4.5s, 5s : 27.5s max wait time 
             $response = $curl->post($url, $data, $this->standard_options());
+            $processtime = $i;
         }
 
         if ($response == null || false) {
@@ -116,7 +123,9 @@ class acci {
 
         $adminstatus = $responsedata->status==true ? "Success" : "Error";
         $adminmessage = $responsedata->message;
-        $this->status_message($adminstatus, $adminmessage);
+        $statustime = $processtime;
+        $methodtitle = $adminendpoint;
+        $this->status_message($adminstatus, $adminmessage, $statustime, $methodtitle);
 
         return $responsedata;
     }
@@ -162,11 +171,14 @@ class acci {
          *          - @return string referral type icon (icon)
          */
 
+        $processtime = 0;
+
         $response = null;
 
         for ($i = 0; $i <= 10 && $response == null; $i++) {
             sleep($i/2); // Inverse Exponential : 0s, 0.5s, 1s, 1.5s, 2s, 2.5s, 3s, 3.5s, 4s, 4.5s, 5s : 27.5s max wait time 
             $response = $curl->get($url, $data, $this->standard_options());
+            $processtime = $i;
         }
 
         if ($response == null) {
@@ -180,7 +192,9 @@ class acci {
 
         $getreferraltypesstatus = $responsedata->status==true ? "Success" : "Error";
         $getreferraltypesmessage = $responsedata->message;
-        $this->status_message($getreferraltypesstatus, $getreferraltypesmessage);
+        $statustime = $processtime;
+        $methodtitle = $referraltypesendpoint;
+        $this->status_message($getreferraltypesstatus, $getreferraltypesmessage, $statustime, $methodtitle);
 
         return $responsedata;
     }
@@ -220,11 +234,14 @@ class acci {
 
         $curl->setHeader($header);
 
+        $processtime = 0;
+
         $response = null;
 
         for ($i = 0; $i <= 10 && $response == null; $i++) {
             sleep($i/2); // Inverse Exponential : 0s, 0.5s, 1s, 1.5s, 2s, 2.5s, 3s, 3.5s, 4s, 4.5s, 5s : 27.5s max wait time 
             $response = $curl->post($url, $data, $this->standard_options());
+            $processtime = $i;
         }
 
         if ($response == null || false) {
@@ -248,7 +265,10 @@ class acci {
 
         $getreferraltypesstatus = $responsedata->status==true ? "Success" : "Error";
         $getreferraltypesmessage = $responsedata->message;
-        $this->status_message($getreferraltypesstatus, $getreferraltypesmessage);
+        $statustime = $processtime;
+        $methodtitle = $getallcoursesendpoint;
+
+        $this->status_message($getreferraltypesstatus, $getreferraltypesmessage, $statustime, $methodtitle);
 
         return $responsedata;
     }
@@ -294,11 +314,14 @@ class acci {
 
         $curl->setHeader($header);
 
+        $processtime = 0;
+
         $response = null;
 
         for ($i = 0; $i <= 10 && $response == null; $i++) {
             sleep($i/2); // Inverse Exponential : 0s, 0.5s, 1s, 1.5s, 2s, 2.5s, 3s, 3.5s, 4s, 4.5s, 5s : 27.5s max wait time 
             $response = $curl->post($url, $data, $this->standard_options());
+            $processtime = $i;
         }
 
         if ($response == null || false) {
@@ -312,7 +335,10 @@ class acci {
 
         $getreferraltypesstatus = $responsedata->status==true ? "Success" : "Error";
         $getreferraltypesmessage = $responsedata->message;
-        $this->status_message($getreferraltypesstatus, $getreferraltypesmessage);
+        $statustime = $processtime;
+        $methodtitle = $getstudentsbyadminendpoint;
+
+        $this->status_message($getreferraltypesstatus, $getreferraltypesmessage, $statustime, $methodtitle);
 
         return $responsedata;
     }
@@ -349,11 +375,14 @@ class acci {
 
         $curl->setHeader($header);
 
+        $processtime = 0;
+
         $response = null;
 
         for ($i = 0; $i <= 10 && $response == null; $i++) {
             sleep($i/2); // Inverse Exponential : 0s, 0.5s, 1s, 1.5s, 2s, 2.5s, 3s, 3.5s, 4s, 4.5s, 5s : 27.5s max wait time 
             $response = $curl->post($url, $data, $this->standard_options());
+            $processtime = $i;
         }
 
         if ($response == null || false) {
@@ -367,7 +396,10 @@ class acci {
 
         $getreferraltypesstatus = $responsedata->status==true ? "Success" : "Error";
         $getreferraltypesmessage = $responsedata->message;
-        $this->status_message($getreferraltypesstatus, $getreferraltypesmessage);
+        $statustime = $processtime;
+        $methodtitle = $getenrollmentlistbystudentid;
+
+        $this->status_message($getreferraltypesstatus, $getreferraltypesmessage, $statustime, $methodtitle);
 
         return $responsedata;
     }
@@ -399,11 +431,14 @@ class acci {
 
         $curl->setHeader($header);
 
+        $processtime = 0;
+
         $response = null;
 
         for ($i = 0; $i <= 10 && $response == null; $i++) {
             sleep($i/2); // Inverse Exponential : 0s, 0.5s, 1s, 1.5s, 2s, 2.5s, 3s, 3.5s, 4s, 4.5s, 5s : 27.5s max wait time 
             $response = $curl->post($url, $data, $this->standard_options());
+            $processtime = $i;
         }
 
         if ($response == null || false) {
@@ -417,7 +452,10 @@ class acci {
 
         $getreferraltypesstatus = $responsedata->status==true ? "Success" : "Error";
         $getreferraltypesmessage = $responsedata->message;
-        $this->status_message($getreferraltypesstatus, $getreferraltypesmessage);
+        $statustime = $processtime;
+        $methodtitle = $getstateendpoint;
+
+        $this->status_message($getreferraltypesstatus, $getreferraltypesmessage, $statustime, $methodtitle);
 
         return $responsedata;
     }
@@ -449,11 +487,14 @@ class acci {
 
         $curl->setHeader($header);
 
+        $processtime = 0;
+
         $response = null;
 
         for ($i = 0; $i <= 10 && $response == null; $i++) {
             sleep($i/2); // Inverse Exponential : 0s, 0.5s, 1s, 1.5s, 2s, 2.5s, 3s, 3.5s, 4s, 4.5s, 5s : 27.5s max wait time 
             $response = $curl->post($url, $data, $this->standard_options());
+            $processtime = $i;
         }
 
         if ($response == null || false) {
@@ -467,7 +508,10 @@ class acci {
 
         $getreferraltypesstatus = $responsedata->status==true ? "Success" : "Error";
         $getreferraltypesmessage = $responsedata->message;
-        $this->status_message($getreferraltypesstatus, $getreferraltypesmessage);
+        $statustime = $processtime;
+        $methodtitle = $getagencybystateidendpoint;
+
+        $this->status_message($getreferraltypesstatus, $getreferraltypesmessage, $statustime, $methodtitle);
 
         return $responsedata;
     }
@@ -534,11 +578,14 @@ class acci {
 
         $curl->setHeader($header);
 
+        $processtime = 0;
+
         $response = null;
 
         for ($i = 0; $i <= 10 && $response == null; $i++) {
             sleep($i/2); // Inverse Exponential : 0s, 0.5s, 1s, 1.5s, 2s, 2.5s, 3s, 3.5s, 4s, 4.5s, 5s : 27.5s max wait time 
             $response = $curl->post($url, $data, $this->standard_options());
+            $processtime = $i;
         }
 
         if ($response == null || false) {
@@ -552,7 +599,9 @@ class acci {
 
         $addadminstatus = $responsedata->status==true ? "Success" : "Error";
         $addadminmessage = $responsedata->message;
-        $this->status_message($addadminstatus, $addadminmessage);
+        $statustime = $processtime;
+        $methodtitle = $addadminendpoint;
+        $this->status_message($addadminstatus, $addadminmessage, $statustime, $methodtitle);
 
         return $responsedata;
     }
@@ -619,11 +668,14 @@ class acci {
 
         $curl->setHeader($header);
 
+        $processtime = 0;
+
         $response = null;
 
         for ($i = 0; $i <= 10 && $response == null; $i++) {
             sleep($i/2); // Inverse Exponential : 0s, 0.5s, 1s, 1.5s, 2s, 2.5s, 3s, 3.5s, 4s, 4.5s, 5s : 27.5s max wait time 
             $response = $curl->post($url, $data, $this->standard_options());
+            $processtime = $i;
         }
 
         if ($response == null || false) {
@@ -637,7 +689,9 @@ class acci {
 
         $newstudentenrollmentstatus = $responsedata->status==true ? "Success" : "Error";
         $newstudentenrollmentmessage = $responsedata->message;
-        $this->status_message($newstudentenrollmentstatus, $newstudentenrollmentmessage);
+        $statustime = $processtime;
+        $methodtitle = $newstudentenrollmentendpoint;
+        $this->status_message($newstudentenrollmentstatus, $newstudentenrollmentmessage, $statustime, $methodtitle);
 
         return $responsedata;
     }
@@ -705,11 +759,14 @@ class acci {
 
         $curl->setHeader($header);
 
+        $processtime = 0;
+
         $response = null;
 
         for ($i = 0; $i <= 10 && $response == null; $i++) {
             sleep($i/2); // Inverse Exponential : 0s, 0.5s, 1s, 1.5s, 2s, 2.5s, 3s, 3.5s, 4s, 4.5s, 5s : 27.5s max wait time 
             $response = $curl->post($url, $data, $this->standard_options());
+            $processtime = $i;
         }
 
         if ($response == null || false) {
@@ -723,7 +780,9 @@ class acci {
 
         $studentselfenrolledstatus = $responsedata->status==true ? "Success" : "Error";
         $studentselfenrolledmessage = $responsedata->message;
-        $this->status_message($studentselfenrolledstatus, $studentselfenrolledmessage);
+        $statustime = $processtime;
+        $methodtitle = $studentselfenrolledendpoint;
+        $this->status_message($studentselfenrolledstatus, $studentselfenrolledmessage, $statustime, $methodtitle);
 
         return $responsedata;
     }
@@ -762,6 +821,8 @@ class acci {
 
         $curl->setHeader($header);
 
+        $processtime = 0;
+
         $response = null;
 
         for ($i = 0; $i <= 10 && $response == null; $i++) {
@@ -780,7 +841,9 @@ class acci {
 
         $checkstudentstatusstatus = $responsedata->status==true ? "Success" : "Error";
         $checkstudentstatusmessage = $responsedata->message;
-        $this->status_message($checkstudentstatusstatus, $checkstudentstatusmessage);
+        $statustime = $processtime;
+        $methodtitle = $checkstudentstatusendpoint;
+        $this->status_message($checkstudentstatusstatus, $checkstudentstatusmessage, $statustime, $methodtitle);
 
         return $responsedata;
     }
@@ -829,11 +892,15 @@ class acci {
          *      - @return string admintoken (token)
          *      - @return string student auto login url (redirect_url)
          */
+
+        $processtime = 0;
+
         $response = null;
 
         for ($i = 0; $i <= 10 && $response == null; $i++) {
             sleep($i/2); // Inverse Exponential : 0s, 0.5s, 1s, 1.5s, 2s, 2.5s, 3s, 3.5s, 4s, 4.5s, 5s : 27.5s max wait time 
             $response = $curl->post($url, $data, $this->standard_options());
+            $processtime = $i;
         }
 
         if ($response == null || false) {
@@ -847,7 +914,9 @@ class acci {
 
         $getreferraltypesstatus = $responsedata->status==true ? "Success" : "Error";
         $getreferraltypesmessage = $responsedata->message;
-        $this->status_message($getreferraltypesstatus, $getreferraltypesmessage);
+        $statustime = $processtime;
+        $methodtitle = $studentauthendpoint;
+        $this->status_message($getreferraltypesstatus, $getreferraltypesmessage, $statustime, $methodtitle);
 
         return $responsedata;
     }
@@ -896,11 +965,14 @@ class acci {
          *      - @return string student auto login url (redirect_url)
          */
 
+        $processtime = 0;
+
         $response = null;
 
         for ($i = 0; $i <= 10 && $response == null; $i++) {
             sleep($i/2); // Inverse Exponential : 0s, 0.5s, 1s, 1.5s, 2s, 2.5s, 3s, 3.5s, 4s, 4.5s, 5s : 27.5s max wait time 
             $response = $curl->post($url, $data, $this->standard_options());
+            $processtime = $i;
         }
 
         if ($response == null || false) {
@@ -914,7 +986,9 @@ class acci {
 
         $studentlogoutstatus = $responsedata->status==true ? "Success" : "Error";
         $studentlogoutmessage = $responsedata->message;
-        $this->status_message($studentlogoutstatus, $studentlogoutmessage);
+        $statustime = $processtime;
+        $methodtitle = $studentlogoutendpoint;
+        $this->status_message($studentlogoutstatus, $studentlogoutmessage, $statustime, $methodtitle);
 
         return $responsedata;
     }
