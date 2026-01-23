@@ -108,8 +108,6 @@ function generate_iframe($redirecturl, $courseforwardurl) {
                 width:100%;
                 left:0;
                 scrolling:no;\"
-                loading=\"eager\"
-                sandbox=\"allow-top-navigation, allow-same-origin\"
                 src=\"$redirecturl\">
             </iframe>
         </div>
