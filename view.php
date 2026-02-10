@@ -108,6 +108,7 @@ function generate_iframe($redirecturl, $courseforwardurl) {
                 width:100%;
                 left:0;
                 scrolling:no;\"
+                allow:autoplay;
                 src=\"$redirecturl\">
             </iframe>
         </div>

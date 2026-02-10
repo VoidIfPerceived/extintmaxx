@@ -152,8 +152,12 @@ function extintmaxx_get_user_grades($instance, $userid = 0) {
     global $DB;
     $acci = new acci();
     $methodchains = new provider_api_method_chains();
-    $adminrecord = $methodchains->admin_record_exists($instance->provider);
-    $url = $adminrecord->url | null;
+    $adminrecord = $methodchains->admin_record_exists($instance->provider, $instance->profile_id);
+    if ($adminrecord->url != null || $adminrecord->url != '') {
+        $url = $adminrecord->url;
+    } else {
+        $url = null;
+    }
     $studentgrades = array();
     if ($userid != 0 && $userid != null) {
         $studentrecord = $methodchains->student_record_exists($userid, $instance->provider, $instance->providercourseid);

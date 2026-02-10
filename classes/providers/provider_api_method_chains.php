@@ -20,9 +20,9 @@ class provider_api_method_chains {
      *  @param string $provider The supplied provider the DB will be checked for.
      *  @return object $providerdata The DB response object with the provider information requested.
      */
-    function admin_record_exists($provider) {
+    function admin_record_exists($provider, $profileid=null) {
         global $DB;
-        $adminrecord = $DB->get_record('extintmaxx_admin', array('provider' => $provider));
+        $adminrecord = $DB->get_record('extintmaxx_admin', array('provider' => $provider, 'id' => $profileid));
         if (!$adminrecord->provider) {
             return false;
         } else if ($adminrecord->provider) {
