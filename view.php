@@ -158,6 +158,7 @@ if (has_capability('mod/extintmaxx:basicreporting', $context = context_course::i
     );
     // $logout = $acci->student_logout($acciuserid->provideruserid, $adminlogin->data->user->superadmin->consumer_key, $profile->url);
     // print_r($logout);
+    $providerlogout = $acci->student_logout($acciuserid->provideruserid, $adminlogin->data->user->superadmin->consumer_key, $profile->url);
     $providerstudent = $methodchains->student_login($USER->id, $profile->provider, $module, $module->id, $profile->url);
     $redirecturl = get_redirect_url($providerstudent);
     $courseforwardurl = acci_course_url($providerstudent, $module, $profile);
