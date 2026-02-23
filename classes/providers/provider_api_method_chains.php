@@ -20,7 +20,13 @@ class provider_api_method_chains {
      *  @param string $provider The supplied provider the DB will be checked for.
      *  @return object $providerdata The DB response object with the provider information requested.
      */
-    function admin_record_exists($provider, $profileid=null) {
+    function admin_record_exists($provider, $profileid) {
+        if (!$provider) {
+            throw new coding_exception("Missing parameter in method call.");
+        }
+        if (!$profileid) {
+            throw new coding_exception("Missing parameter in method call.");
+        }
         global $DB;
         $adminrecord = $DB->get_record('extintmaxx_admin', array('provider' => $provider, 'id' => $profileid));
         if (!$adminrecord->provider) {
@@ -185,7 +191,7 @@ class provider_api_method_chains {
     function student_login($userid, $provider, $module, $instanceid, $url = null) {
         global $DB;
         $acci = new acci();
-        $adminrecord = $this->admin_record_exists($provider);
+        $adminrecord = $this->admin_record_exists($provider, $module->profile_id);
         $studentrecord = $DB->get_record(
             'extintmaxx_user',
             array(
