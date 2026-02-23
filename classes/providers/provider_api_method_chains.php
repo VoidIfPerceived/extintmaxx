@@ -36,6 +36,16 @@ class provider_api_method_chains {
         }
     }
 
+    function get_profile_by_course_id($courseid) {
+        global $DB;
+        $profileid = $DB->get_field('extintmaxx_provider', 'profile_id', array('id' => $courseid));
+        $profile = $DB->get_record('extintmaxx_admin', array('id' => $profileid));
+        if (!$profile) {
+            throw new exception("No profile found for course id: " . $courseid);
+        }
+        return $profile;
+    }
+
     function get_all_profiles() {
         global $DB;
         $profiles = $DB->get_records('extintmaxx_admin', null, 'id ASC', 'id, name');

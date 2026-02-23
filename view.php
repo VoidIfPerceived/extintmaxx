@@ -30,8 +30,8 @@ $providercourse = $methodchains->provider_record_exists($profile->provider, $mod
 
 $PAGE->set_context(context_system::instance());
 
-function admin_actions($courseid) {
-    $reportingurl = "/mod/extintmaxx/reporting.php?courseid=$courseid";
+function admin_actions($courseid, $provider, $profileid) {
+    $reportingurl = "/mod/extintmaxx/reporting.php?courseid=$courseid&provider=$provider&profileid=$profileid";
     echo "<a href='$reportingurl'>View Reporting</a>";
 }
 
@@ -149,7 +149,7 @@ echo $OUTPUT->header();
 if (has_capability('mod/extintmaxx:basicreporting', $context = context_course::instance($cm->course))) {
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
-    admin_actions($course->id);
+    admin_actions($course->id, $module->provider, $module->profile_id);
 } else {
     $adminlogin = $acci->admin_login($profile->providerusername, $profile->providerpassword, $profile->url);
     $acciuserid = $DB->get_record(

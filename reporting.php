@@ -9,7 +9,10 @@ global $USER, $DB;
 $PAGE->set_context(context_system::instance());
 $methodchains = new provider_api_method_chains();
 $acci = new acci();
-$adminrecord = $methodchains->admin_record_exists('acci');
+$courseid = required_param('courseid', PARAM_INT);
+$provider = required_param('provider', PARAM_TEXT);
+$profileid = required_param('profileid', PARAM_INT);
+$adminrecord = $methodchains->admin_record_exists($provider, $profileid);
 
 /** Gets the course which was passed into reporting.php */
 function get_current_course($courseid) {
@@ -57,53 +60,31 @@ function parse_table_information($caplevel, $requesteddata = [], $students, $adm
     $methodchains = new provider_api_method_chains();
     $acci = new acci();
     $tabledata = array();
-    $provideruserids = array();
-    foreach ($students as $student) {
-        array_push($provideruserids, $student->provideruserid);
-    }
-    $courses = get_all_courses();
-    $instancesbycourseid = array();
-    foreach ($courses as $course) {
-        $instances = get_allowed_extintmaxx_instances($caplevel, $course);
-        array_push($instancesbycourseid, $instances);
-    }
-    $providercourseids = array();
-    foreach ($instances as $instance) {
-        array_push($providercourseids, $instance->providercourseid);
-    }
-    $providercourseids = array_unique($providercourseids);
-    $studentsbyprovidercourse = array();
-    foreach ($providercourseids as $providercourseid) {
-        $studentdata = $methodchains->get_students_course_data($adminrecord, 'acci', $providercourseid, $provideruserids, $url);
-        if ($studentdata) {
-            array_push($studentsbyprovidercourse, $studentdata);
-        }
-    }
-    foreach ($studentsbyprovidercourse as $studentdata) {
-        foreach ($studentdata as $student) {
-            if (!$student->coursedata->errors) {
-                $student = $student->coursedata->data;
-                $rowdata = array();
-                foreach ($requesteddata as $field) {
-                    $fieldarray = explode(':', $field);
-                    $x = count($fieldarray);
-                    if ($x < 2) {
-                        $data = $student->{$fieldarray[0]};
-                    } else if ($x < 3) {
-                        $data = $student->{$fieldarray[0]}->{$fieldarray[1]};
-                    } else if ($x < 4) {
-                        $data = $student->{$fieldarray[0]}->{$fieldarray[1]}->{$fieldarray[2]};
-                    } else {
-                        new Exception("Field Flooded! Specified field is too deep.");
-                    };
-                array_push($rowdata, $data);
-                }
-            array_push($tabledata, table_row(false, $rowdata));
-            } else {
-                continue;
+    foreach ($students as $studentdata) {
+        $studentcourseinfo = $methodchains->get_students_course_data($adminrecord, 'acci', $studentdata->providercourseid, [$studentdata->provideruserid], $url);
+        if ($studentcourseinfo) {
+            $studentcourseinfo = $studentcourseinfo[0]->coursedata->data;
+            $rowdata = array();
+            foreach ($requesteddata as $field) {
+                $fieldarray = explode(':', $field);
+                $x = count($fieldarray);
+                if ($x < 2) {
+                    $data = $studentcourseinfo->{$fieldarray[0]};
+                } else if ($x < 3) {
+                    $data = $studentcourseinfo->{$fieldarray[0]}->{$fieldarray[1]};
+                } else if ($x < 4) {
+                    $data = $studentcourseinfo->{$fieldarray[0]}->{$fieldarray[1]}->{$fieldarray[2]};
+                } else {
+                    new Exception("Field Flooded! Specified field is too deep.");
+                };
+            array_push($rowdata, $data);
             }
+        array_push($tabledata, table_row(false, $rowdata));
+        } else {
+            continue;
         }
     }
+
     return $tabledata;
 }
 
@@ -165,8 +146,6 @@ function back_to_course_button($courseid) {
 }
 
 echo $OUTPUT->header();
-
-$courseid = $_GET['courseid'];
 
 $PAGE->set_heading(get_string('reporting', 'extintmaxx'));
 
